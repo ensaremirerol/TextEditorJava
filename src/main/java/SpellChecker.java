@@ -17,12 +17,21 @@ class CannotInitilazeWordDictionary extends Exception{
         super(message);
     }
 }
+// Yazım hatalarını denetler
 public class SpellChecker {
     
+    // İçerdeki en uzun kelime
     private int maxLength = 0;
     
+    // Aynı uzunluktaki kelimeler bir listeye atılır
+    // Ondan sonra o listeler bu listeye atılır
+    /*
+        0           1              2            ...
+        length 1    length 2       length 3     ...
+    */
     ArrayList<WordList> wordsList = new ArrayList<>();
-
+    
+    // Dosya okunarak wordsList oluşturulur
     public SpellChecker(String filePath) throws CannotInitilazeWordDictionary {
         FileHandler fileHandler = new FileHandler();
         try{
@@ -46,6 +55,7 @@ public class SpellChecker {
         }       
     }
     
+    // Array ile wordsList oluşturulur
     public SpellChecker(String [] wordArray){
         for (String word : wordArray) {
             int index = word.length() -1;
@@ -63,27 +73,62 @@ public class SpellChecker {
         
     }
     
+    // Kelime kontrolü
+    /*
+        a  h  m  e  t   Listedeki kelime
+        |  |  \ /   | 
+        |  |  / \   |
+        a  h  e  m  t   Kontrol edilen kelime
+    
+        Listeden bir kelime seçilir
+        Kelime karakter karakter taranır
+        Bir indexdeki karakter eşleşmez ise yukardaki gibi çapraz eşleme yapmaya
+            çalışılır
+        Çapraz eşleme başarılı ise
+            - Karakter karakter taramaya devam edilir
+        Değil ise
+            - Listedeki bir sonraki kelime seçilir
+         
+        Son karakter yada karakterler(Çapraz eşleme) taramadana geçrse
+        Kontrol edilen kelimenin büyük harf küçük harf durumuna göre 
+        Doğru kelime geri döndürülür
+    
+    
+    */
     public String checkWord(String word){
+        // Kelime boş ise
         if (word.equals("")) return "";
         
+        // Kelimenin hangi listede aranacağı seçilir
         int index = word.length() -1;
         
+        // Eğerki kelime zaten listede ise kelime geri döndürlür
         if(wordsList.get(index).contains(word.toLowerCase())) return word;
         
+        // Doğruluk için kullanılır
         boolean found;
         
+        // Hataların bulunduğu indexleri tutar
         ArrayList<Integer> typoIndexes = new ArrayList<>();
         
+        String _word = word.toLowerCase();
+        
+        // Listeden tek tek kelime seçer
         for(String listWord : wordsList.get(index)){
-            String _word = word.toLowerCase();
             typoIndexes.clear();
-            found = true;     
+            found = true;
+            // Karakter karakter tarama işlemi
             for (int i = 0; i < word.length(); i++) {
+                // Eğerki karakterler eşleşirse devam edilir
                 if(_word.charAt(i) != listWord.charAt(i)){
+                    // Değilse çapraz eşleme yapılır
+                    // Çapraz eşlemenin index dışına çıkma ihtimali vardır
                     try{
                       if(_word.charAt(i+1) == listWord.charAt(i)
                             && listWord.charAt(i+1) == _word.charAt(i)){
                         typoIndexes.add(i);
+                        // Index burda 1 artırılır for döngüsü kendisi 1 daha atlar
+                        // Toplamda 2 indeks geçilir
                         i++;
                         }
                         else{
@@ -91,12 +136,15 @@ public class SpellChecker {
                             break;
                         }  
                     }
+                    // Index dışına çıkarsa
                     catch (IndexOutOfBoundsException e){
                         found = false;
                         break;
                     }                   
                 }
             }
+            // Kelime bulunursa orjinal kelimenin Büyük/küçük harf
+            // durumuna göre kelime yeniden yazılır
             if(found){
                 char [] wordArr = word.toCharArray();
                 for(int typoIndex : typoIndexes){
@@ -107,6 +155,7 @@ public class SpellChecker {
                 return String.valueOf(wordArr);
             }
         }
+        // Eğerki bulunamazsa boş string döndürülür
         return "";
     }   
 }

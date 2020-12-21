@@ -11,6 +11,8 @@ import java.util.ArrayList;
  *
  * @author ensar
  */
+
+// Aynı uzunluktaki kelimelerin tutulduğu liste
 public class WordList extends ArrayList<String> implements Comparable<WordList>{
        private final int wordsLength;
        

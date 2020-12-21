@@ -15,33 +15,46 @@ import javax.swing.undo.UndoManager;
  * @author ensar
  */
 public class Editor extends JFrame implements ActionListener {
+    // Toplam açık olan editor pencersinin sayısnı tutar
     private static int editorCount = 0;
     
+    // Metin bloğu
     private JTextArea textArea; // Text area
     
+    // Undo ve Redo işlevlerinin çalışması için
     private UndoManager undoManager = new UndoManager();
     
+    // Sağ tıklama menüsü
     private final JPopupMenu popMenu;
     
+    // Dosya okuma/yazma işlemleri için arayüz
     private FileHandlerUI fileHandlerUI;
     
-    private FindReplace findReplace;
+    // Ara ve değiştir işlemleri için obje
     
+    // Yazım hatalarını denetlemek için gerekli obje
     private static SpellChecker spellChecker;
     
+    // Pencere menü barı
     private final JMenuBar menuBar;
     
+    // Pencere bar menüleri
     private final JMenu menu1, menu2;
     
+    // Pencere bar menülerinin itemları
     private final JMenuItem menu1Item1, menu1Item2 , menu1Item3, menu1Item4,
             menu2Item1, menu2Item2, menu2Item3, menu2Item4, menu2Item5,
             menu2Item6, menu2Item7, popMenuItem1, popMenuItem2, popMenuItem3;
     
+    // Tüm ekarnın kaydırlabilir olmasını sağlamaktdadır
+    //      textArea bunun içine eklenmektedir
     private final JScrollPane scrollPane;
     
     Editor(){
+        // Pencere adı
         super("Text Editor"); 
         
+        // Tema ayarı
         try{
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel"); // Theme setting
             MetalLookAndFeel.setCurrentTheme(new OceanTheme());
@@ -51,6 +64,9 @@ public class Editor extends JFrame implements ActionListener {
         }
         
         textArea = new JTextArea();
+        
+        // SpellChecker ın tanımlanması
+        // Olası hata nedeni: words.txt bulunamadı
         if(spellChecker == null){
             try{
                 spellChecker = new SpellChecker("./words.txt");
@@ -62,8 +78,11 @@ public class Editor extends JFrame implements ActionListener {
         
         fileHandlerUI = new FileHandlerUI(textArea, this);
         
+        // undoManager textArea içindeki document objesinie bağlanır
         textArea.getDocument().addUndoableEditListener(undoManager); // Adding undoManager
         
+        // Bu custom DocumentListener dosya değiştiğinde haber verir
+        // Dosyanın kayıt edilmesine gerek olup olmadığı bu listenr ile belirlenir
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -83,7 +102,7 @@ public class Editor extends JFrame implements ActionListener {
         
         popMenu = new JPopupMenu();
         
-        // Adding mouse listener for popMenu
+        // Pop menu için dinleyici eklenir
         textArea.addMouseListener(new MouseAdapter() {
          @Override
          public void mouseReleased(MouseEvent me) {
@@ -91,7 +110,7 @@ public class Editor extends JFrame implements ActionListener {
          }
          }) ;
         
-        // Adding JTextArea to JScrollPane for ability of scrolling
+        // JScrollPane e JTextArea eklenerek pencerinin kaydırılması sağlanır
         scrollPane = new JScrollPane(textArea);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -189,6 +208,7 @@ public class Editor extends JFrame implements ActionListener {
         setJMenuBar(menuBar);
         add(scrollPane);
         setSize(600,600);
+        // Pencere kapama eylemleri değiştirilir
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -196,32 +216,40 @@ public class Editor extends JFrame implements ActionListener {
             }
         });
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        
         setVisible(true);
         
         editorCount += 1;
     }
     
+    // Factory method
     public static Editor createWindow(){
         return new Editor();
     }
  
-    // Shows popup menu at position of mouse
+    // Popmenu yü farenin bulunduğu noktada açar
     private void showPopMenu(MouseEvent me){
         if(me.isPopupTrigger())
          popMenu.show(me.getComponent(), me.getX(), me.getY());
     }
     
+    // Pencereden çıkılmak istenirse bu metoda girlir
     private void onExit(){
+        // Dosya kaydedilmedi ise uyarı penceresi çıakrtır
+        // Veilen cevaba göre:
+        //  - Kaydetmeden çıkılabilir
+        //  - Kaydedilerek çıkılablir
+        //  - Çıkma işlemi iptal edilebilir
         if(!fileHandlerUI.isIsSaved()){
             switch(saveWarning()){
                 case JOptionPane.YES_OPTION:
                     if(fileHandlerUI.saveFunction() == JFileChooser.APPROVE_OPTION){
-                        Dispose();
+                        dispose();
                     }
                     break;
                      
                 case JOptionPane.NO_OPTION:
-                    Dispose();
+                    dispose();
                     break;
                      
                 case JOptionPane.CANCEL_OPTION:
@@ -229,10 +257,11 @@ public class Editor extends JFrame implements ActionListener {
             }
         }
         else{
-            Dispose();
+            dispose();
         }
     }
     
+    // Kaydetme uyarı penceresi
     private int saveWarning(){
         String[] buttonLabels = new String[] {"Yes", "No", "Cancel"};
         String defaultOption = buttonLabels[0];
@@ -248,18 +277,17 @@ public class Editor extends JFrame implements ActionListener {
                 defaultOption);     
     }
     
-    private void Dispose(){
-        if (findReplace != null){
-            findReplace.dispose();
-        }
-        dispose();
+    @Override
+    public void dispose(){
         editorCount -= 1;
         if (editorCount <=0){
+            super.dispose();
             System.exit(editorCount);
         }
+        super.dispose();
     }
     
-    // MenuBar Actions
+    // Menu barındaki işlemler
     @Override
     public void actionPerformed(ActionEvent e) 
     { 
@@ -282,7 +310,7 @@ public class Editor extends JFrame implements ActionListener {
                 if(undoManager.canRedo())undoManager.redo();
                 break;
             case "Find":
-                findReplace = new FindReplace(this, textArea);
+                FindReplace.createWindow(this, textArea);
                 break;
             case "Save":
                 fileHandlerUI.saveFunction();

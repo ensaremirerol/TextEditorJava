@@ -19,6 +19,7 @@ import javax.swing.JTextField;
  * @author ensar
  */
 public class FindReplace extends JFrame implements ActionListener{
+    
     final private JTextArea textArea;
     final private JFrame window;
     private int currIndex = 0;
@@ -89,22 +90,35 @@ public class FindReplace extends JFrame implements ActionListener{
         
     }
     
+    // Factory metod
+    static FindReplace createWindow(JFrame window, JTextArea textArea){
+        return new FindReplace(window, textArea);
+    }
+    
+    // Bulma işlevi gerçekleştirilir
     private int find(boolean showErrors){
         currIndex = 0;
+        // Verilen metinin başlangıc indexi aranır
         selectionStart = textArea.getText().toLowerCase().
                 indexOf(findText.getText().toLowerCase());
+        // Verilen metin yok ise -1 dönderir
         if (selectionStart == -1 && showErrors){
             JOptionPane.showMessageDialog(this,
                     "Could not find \"" + findText.getText() + "\"");
             return -1;
-        }      
+        }
+        // Seçimin son index i belirlenir
         int selectionEnd = selectionStart + findText.getText().length();
         currIndex = selectionEnd +1;
+        // Editörde seçilir
         textArea.select(selectionStart, selectionEnd);
         return 1;
     }
     
+    // Bir sonrakini bulma işlevini gerçekleştirir
     private void findNext(){
+        
+        // Null check
         String selectedString = textArea.getSelectedText().toLowerCase();
         try{
             selectedString.equals("");
@@ -119,6 +133,7 @@ public class FindReplace extends JFrame implements ActionListener{
             }
         }
         try{
+            // Mevcut indexden sonraki karşılaşmayı arar
             selectionStart = textArea.getText().toLowerCase().
                     indexOf(selectedString, currIndex);
             if (selectionStart == -1){
@@ -136,6 +151,7 @@ public class FindReplace extends JFrame implements ActionListener{
         }       
     }
     
+    // Bulunan metini istenen metinle yer değiştirir
     private int replace(boolean showErrors){
         try{
             find(showErrors);
@@ -152,7 +168,9 @@ public class FindReplace extends JFrame implements ActionListener{
         }
     }
     
+    // Hepsini değiştir işlevi
     private void replaceAll(){
+        // replace -1 döndürene kadar devam eder
         while(replace(false) == 1){}
     }
     

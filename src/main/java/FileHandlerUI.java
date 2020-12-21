@@ -11,10 +11,9 @@ import javax.swing.JTextArea;
  *
  * @author ensar
  */
+
+// Dosya okuma yazma işlemleri için arayüzü sağlar FileHandler inhert eder
 public class FileHandlerUI extends FileHandler {
-    private static final String [] ERROR_MESSAGES = {
-        "Something went wrong while saving file\n",
-        "Something went wrong while opening file"};
     
     final private JTextArea textArea;
     final private JFrame window;
@@ -29,6 +28,7 @@ public class FileHandlerUI extends FileHandler {
         filePath = "";
     }
     
+    // Hızlı kaydetme işlemini gerçekleştirir
     public int saveFunction(){
         if(!filePath.equals("")){
             try{
@@ -36,7 +36,7 @@ public class FileHandlerUI extends FileHandler {
                 isSaved = true;
             }
             catch(CannotSaveException e){
-                JOptionPane.showMessageDialog(window, ERROR_MESSAGES[1] +
+                JOptionPane.showMessageDialog(window, "Something went wrong while saving file\n" +
                         e.getMessage());
             }          
         }
@@ -46,6 +46,7 @@ public class FileHandlerUI extends FileHandler {
         return 0;
     }
     
+    // Farklı kaydet işlevini gerçekleştirir
     public int saveAsWindow(){
         fileChooser = new JFileChooser("f:");
         int saveDialogResult = fileChooser.showSaveDialog(window);
@@ -57,13 +58,14 @@ public class FileHandlerUI extends FileHandler {
                 isSaved = true;
             }
             catch(CannotSaveException e){
-                JOptionPane.showMessageDialog(window, ERROR_MESSAGES[0] +
+                JOptionPane.showMessageDialog(window, "Something went wrong while saving file\n" +
                         e.getMessage());
             }
         }
         return saveDialogResult;
     }
     
+    // Açma işlevini gerçekleştirir
     public void openWindow(){
         fileChooser = new JFileChooser("f:");
         int openDialogResult = fileChooser.showSaveDialog(window);
@@ -75,7 +77,7 @@ public class FileHandlerUI extends FileHandler {
                 isSaved = true;
             }
             catch(CannotOpenException e){
-               JOptionPane.showMessageDialog(window, ERROR_MESSAGES[1] +
+               JOptionPane.showMessageDialog(window, "Something went wrong while opening file\n" +
                         e.getMessage()); 
             }
         }

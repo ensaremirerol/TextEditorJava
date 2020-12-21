@@ -18,6 +18,8 @@ import javax.swing.JTextField;
  *
  * @author ensar
  */
+
+// SpellChecker için arayüz sağlar
 public class SpellCheckerUI extends JFrame implements ActionListener{
     final private JTextArea textArea;
     
@@ -27,6 +29,7 @@ public class SpellCheckerUI extends JFrame implements ActionListener{
     
     final private JButton findNext, replace, replaceAll, cancel;
     
+    // Verilen text deki kelimeleri teker teker Word objesi olarak geri döndürür
     final private WordYielder wordYielder;
     
     final private SpellChecker spellChecker;
@@ -91,22 +94,29 @@ public class SpellCheckerUI extends JFrame implements ActionListener{
         
     }
     
+    // Factory method
     public static SpellCheckerUI createWindow(JFrame window, JTextArea textArea,
             SpellChecker spellChecker){
         return new SpellCheckerUI(window, textArea, spellChecker);
     }
     
     public int findNext(){
+        // Bir sonraki kelime alınır
         Word wordObject = wordYielder.next();
         if (wordObject != null){
+            // Word objesinden string alınır
             String word = wordObject.getWord();
+            // Kelime kontrol edilir
             String resultString = spellChecker.checkWord(word);
+            // Eğerki reusltString word e eşit ve word boş değilse kelime doğrudur
+            // Bir sonraki kelime kontrol edilir
             if (resultString.equals(word) && !word.equals("")) return findNext();
             textArea.select(wordObject.getStartIndex(),
                     wordObject.getEndIndex());
             
             typoText.setText(word);
             
+            // Doğru kelime bulunamadıysa
             if(resultString.equals("")){
                 correctText.setText(word);
             }
@@ -115,12 +125,14 @@ public class SpellCheckerUI extends JFrame implements ActionListener{
             }
         }
         else{
+            // Dosya sonu
             JOptionPane.showMessageDialog(this, "Reached end of file");
             return -1;
         }
         return 0;
     }
     
+    // Yer değiştirme işlemi
     public int replace(){
         try {
             textArea.replaceSelection(correctText.getText());
@@ -130,6 +142,7 @@ public class SpellCheckerUI extends JFrame implements ActionListener{
         return -1;
     }
     
+    // Tüm hatalrı düzeltir
     public void replaceAll(){
         while(replace() != -1){}
     }

@@ -11,7 +11,9 @@ import java.util.regex.Pattern;
  * @author ensar
  */
 
+// Verilen text deki bir sonraki kelime bulunur
 public class WordYielder{
+    // Harfler RegularExpression kullanılarak bulunur
     private static final Pattern ACCEPT_PATTERN = Pattern.compile("[a-zA-ZıİçÇöÖşŞüÜğĞ]");
     private final String text;
     private int currIndex;
@@ -32,6 +34,8 @@ public class WordYielder{
      *
      * @return a Word Object
      */
+    
+    // Bir sonraki kelimeyi oluşturur
     public Word next() {
         String _word = "";
         String currChar;

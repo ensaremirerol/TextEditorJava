@@ -31,7 +31,7 @@ class CannotOpenException extends Exception{
     }
 }
 
-
+// Dosya okuma/yazma işlemleri için sınıf
 public class FileHandler {
     
     
@@ -46,6 +46,7 @@ public class FileHandler {
     public FileHandler(){
     }
     
+    // Dosyayı kaydetme işlemi
     public void save(String filePath, String text) throws CannotSaveException{
         try {
             if(!filePath.endsWith(".txt")){
@@ -69,6 +70,7 @@ public class FileHandler {
             }
     }
     
+    // Dosyayı açma işlemi
     public String open(String filePath) throws CannotOpenException{
         if(!filePath.endsWith(".txt")){
             filePath = filePath + ".txt";

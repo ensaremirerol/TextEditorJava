@@ -8,6 +8,8 @@
  *
  * @author ensar
  */
+
+// WordYilder bu objeyi döndürür
 public class Word {
     private final int startIndex;
     private final int endIndex;
