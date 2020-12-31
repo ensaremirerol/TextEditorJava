@@ -30,11 +30,12 @@ public class SpellCheckerUI extends JFrame implements ActionListener{
     final private JButton findNext, replace, replaceAll, cancel;
     
     // Verilen text deki kelimeleri teker teker Word objesi olarak geri döndürür
-    final private WordYielder wordYielder;
+    private WordYielder wordYielder;
     
     final private SpellChecker spellChecker;
     
     public SpellCheckerUI(JFrame window, JTextArea textArea, SpellChecker spellChecker){
+        super("Spell Checker");
         this.window = window;
         this.textArea = textArea;
         this.spellChecker = spellChecker;
@@ -127,6 +128,7 @@ public class SpellCheckerUI extends JFrame implements ActionListener{
         else{
             // Dosya sonu
             JOptionPane.showMessageDialog(this, "Reached end of file");
+            wordYielder = new WordYielder(this.textArea.getText());
             return -1;
         }
         return 0;
@@ -134,12 +136,10 @@ public class SpellCheckerUI extends JFrame implements ActionListener{
     
     // Yer değiştirme işlemi
     public int replace(){
-        try {
+        if(textArea.getSelectedText() != null){
             textArea.replaceSelection(correctText.getText());
-            return findNext();
-        } catch (NullPointerException | IndexOutOfBoundsException e) {
         }
-        return -1;
+        return findNext();
     }
     
     // Tüm hatalrı düzeltir
@@ -164,7 +164,7 @@ public class SpellCheckerUI extends JFrame implements ActionListener{
                 replace();
                 break;
             case "Correct All Typos":
-                replace();
+                replaceAll();
                 break;
             case "Cancel":
                 dispose();
