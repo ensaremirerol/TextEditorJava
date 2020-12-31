@@ -26,6 +26,7 @@ public class FileHandlerTest {
         String textToWrite = "adkdllsdk\ndjjasldasıo5486";
         instance.save(filePath, textToWrite);
         String result = instance.open(filePath);
+        instance.delete();
         assertEquals(textToWrite, result);
     }
     

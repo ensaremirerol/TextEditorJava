@@ -30,6 +30,7 @@ public class FindReplace extends JFrame implements ActionListener{
     final private JButton find, findNext, replace, replaceAll, cancel;
     
     public FindReplace (JFrame window, JTextArea textArea){
+        super("Find and Replace");
         this.window = window;
         this.textArea = textArea;
         

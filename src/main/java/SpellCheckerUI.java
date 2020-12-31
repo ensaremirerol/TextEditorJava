@@ -67,23 +67,23 @@ public class SpellCheckerUI extends JFrame implements ActionListener{
         correctText.setBounds(10+labelWidth, 10+labelHeight+10, 120, 20);
         add(correctText);
         
-        findNext.setBounds(225, 6, 115, 20);
+        findNext.setBounds(225, 6, 150, 20);
         add(findNext);
         findNext.addActionListener(this);
 
-        replace.setBounds(225, 28, 115, 20);
+        replace.setBounds(225, 28, 150, 20);
         add(replace);
         replace.addActionListener(this);
 
-        replaceAll.setBounds(225, 50, 115, 20);
+        replaceAll.setBounds(225, 50, 150, 20);
         add(replaceAll);
         replaceAll.addActionListener(this);
 
-        cancel.setBounds(225, 72, 115, 20);
+        cancel.setBounds(225, 72, 150, 20);
         add(cancel);
         cancel.addActionListener(this);
         
-        setSize(360,160);
+        setSize(400,160);
         setResizable(false);
         
         setLocationRelativeTo(textArea);

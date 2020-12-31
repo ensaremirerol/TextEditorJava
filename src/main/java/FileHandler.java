@@ -105,4 +105,10 @@ public class FileHandler {
         }          
     }
     
+    public void delete(){
+        if(file != null){
+            file.delete();
+        }
+    }
+    
 }
