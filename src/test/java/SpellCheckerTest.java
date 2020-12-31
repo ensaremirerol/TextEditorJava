@@ -63,6 +63,7 @@ public class SpellCheckerTest {
         String result = instance.checkWord(word);
         assertEquals(expResult, result);
     }
+    @Test
     public void testCheckWordNotInList() {
         System.out.println("checkWordNotInList");
         String word = "Ensar";
