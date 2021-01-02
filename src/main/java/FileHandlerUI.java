@@ -68,7 +68,7 @@ public class FileHandlerUI extends FileHandler {
     // Açma işlevini gerçekleştirir
     public void openWindow(){
         fileChooser = new JFileChooser("f:");
-        int openDialogResult = fileChooser.showSaveDialog(window);
+        int openDialogResult = fileChooser.showOpenDialog(window);
         
         if (openDialogResult == JFileChooser.APPROVE_OPTION){
             filePath = fileChooser.getSelectedFile().getAbsolutePath();
