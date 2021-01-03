@@ -29,7 +29,7 @@ public class SpellChecker {
         0           1              2            ...
         length 1    length 2       length 3     ...
     */
-    ArrayList<WordList> wordsList = new ArrayList<>();
+    ArrayList<ArrayList<String>> wordsList = new ArrayList<>();
     
     // Dosya okunarak wordsList oluşturulur
     public SpellChecker(String filePath) throws CannotInitilazeWordDictionary {
@@ -43,7 +43,7 @@ public class SpellChecker {
                }
                else{
                    for (int i = 0; i < word.length() - maxLength; i++) {
-                       wordsList.add(new WordList(i));
+                       wordsList.add(new ArrayList());
                    }
                    maxLength = word.length();
                    wordsList.get(index).add(word.toLowerCase());
@@ -64,7 +64,7 @@ public class SpellChecker {
             }
             else{
                 for (int i = 0; i < word.length() - maxLength; i++) {
-                       wordsList.add(new WordList(i));
+                       wordsList.add(new ArrayList());
                    }
                    maxLength = word.length();
                    wordsList.get(index).add(word.toLowerCase());

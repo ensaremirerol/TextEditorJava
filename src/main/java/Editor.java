@@ -116,8 +116,7 @@ public class Editor extends JFrame implements ActionListener {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
              
         // Menu Bar init
-        menuBar = new JMenuBar();
-        
+        menuBar = new JMenuBar();        
         
         // File menu init
         menu1 = new JMenu("File");
