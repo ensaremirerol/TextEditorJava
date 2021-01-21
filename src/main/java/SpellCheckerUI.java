@@ -1,6 +1,7 @@
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,6 +33,8 @@ public class SpellCheckerUI extends JFrame implements ActionListener{
     // Verilen text deki kelimeleri teker teker Word objesi olarak geri döndürür
     private WordYielder wordYielder;
     
+    final private Iterator iterator;
+    
     final private SpellChecker spellChecker;
     
     public SpellCheckerUI(JFrame window, JTextArea textArea, SpellChecker spellChecker){
@@ -40,6 +43,7 @@ public class SpellCheckerUI extends JFrame implements ActionListener{
         this.textArea = textArea;
         this.spellChecker = spellChecker;
         wordYielder = new WordYielder(textArea.getText());
+        iterator = wordYielder.iterator();
         JLabel label1 = new JLabel("Typo");
         JLabel label2 = new JLabel("Correct Word");
         
@@ -103,7 +107,7 @@ public class SpellCheckerUI extends JFrame implements ActionListener{
     
     public int findNext(){
         // Bir sonraki kelime alınır
-        Word wordObject = wordYielder.next();
+        Word wordObject = (Word)iterator.next();
         if (wordObject != null){
             // Word objesinden string alınır
             String word = wordObject.getWord();

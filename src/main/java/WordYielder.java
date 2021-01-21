@@ -1,3 +1,4 @@
+import java.util.Iterator;
 import java.util.regex.Pattern;
 
 /*
@@ -11,14 +12,27 @@ import java.util.regex.Pattern;
  * @author ensar
  */
 
+public class WordYielder implements Iterable<Word>{
+    private final String text;
+    public WordYielder(String text){
+        this.text = text;
+    } 
+
+    @Override
+    public Iterator<Word> iterator() {
+        return new WordYielderIterator(text);
+    }
+    
+}
+
 // Verilen text deki bir sonraki kelime bulunur
-public class WordYielder{
+class WordYielderIterator implements Iterator<Word>{
     // Harfler RegularExpression kullanılarak bulunur
     private static final Pattern ACCEPT_PATTERN = Pattern.compile("[a-zA-ZıİçÇöÖşŞüÜğĞ]");
     private final String text;
     private int currIndex;
     private boolean endOfFile = false;
-    public WordYielder(String text){
+    public WordYielderIterator(String text){
         this.text = text;
         currIndex = 0;
     }    
@@ -36,6 +50,7 @@ public class WordYielder{
      */
     
     // Bir sonraki kelimeyi oluşturur
+    @Override
     public Word next() {
         String _word = "";
         String currChar;
@@ -65,5 +80,10 @@ public class WordYielder{
                 currIndex++;
             }
         }
+    }
+
+    @Override
+    public boolean hasNext() {
+        return !endOfFile;
     }
 }
