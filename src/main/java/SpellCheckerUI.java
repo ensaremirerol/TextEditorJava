@@ -35,13 +35,11 @@ public class SpellCheckerUI extends JFrame implements ActionListener{
     
     final private Iterator iterator;
     
-    final private SpellChecker spellChecker;
     
-    public SpellCheckerUI(JFrame window, JTextArea textArea, SpellChecker spellChecker){
+    public SpellCheckerUI(JFrame window, JTextArea textArea){
         super("Spell Checker");
         this.window = window;
         this.textArea = textArea;
-        this.spellChecker = spellChecker;
         wordYielder = new WordYielder(textArea.getText());
         iterator = wordYielder.iterator();
         JLabel label1 = new JLabel("Typo");
@@ -100,9 +98,8 @@ public class SpellCheckerUI extends JFrame implements ActionListener{
     }
     
     // Factory method
-    public static SpellCheckerUI createWindow(JFrame window, JTextArea textArea,
-            SpellChecker spellChecker){
-        return new SpellCheckerUI(window, textArea, spellChecker);
+    public static SpellCheckerUI createWindow(JFrame window, JTextArea textArea){
+        return new SpellCheckerUI(window, textArea);
     }
     
     public int findNext(){
@@ -112,7 +109,7 @@ public class SpellCheckerUI extends JFrame implements ActionListener{
             // Word objesinden string alınır
             String word = wordObject.getWord();
             // Kelime kontrol edilir
-            String resultString = spellChecker.checkWord(word);
+            String resultString = SpellChecker.instance.checkWord(word);
             // Eğerki reusltString word e eşit ve word boş değilse kelime doğrudur
             // Bir sonraki kelime kontrol edilir
             if (resultString.equals(word) && !word.equals("")) return findNext();

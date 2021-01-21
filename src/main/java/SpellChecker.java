@@ -20,6 +20,8 @@ class CannotInitilazeWordDictionary extends Exception{
 // Yazım hatalarını denetler
 public class SpellChecker {
     
+    public static SpellChecker instance;
+    
     // İçerdeki en uzun kelime
     private int maxLength = 0;
     
@@ -72,6 +74,11 @@ public class SpellChecker {
         }
         
     }
+    
+    public static void initialize(String filePath) throws CannotInitilazeWordDictionary{
+        instance = new SpellChecker(filePath);
+    }
+    
     
     // Kelime kontrolü
     /*

@@ -30,11 +30,6 @@ public class Editor extends JFrame implements ActionListener {
     // Dosya okuma/yazma işlemleri için arayüz
     private FileHandlerUI fileHandlerUI;
     
-    // Ara ve değiştir işlemleri için obje
-    
-    // Yazım hatalarını denetlemek için gerekli obje
-    private static SpellChecker spellChecker;
-    
     // Pencere menü barı
     private final JMenuBar menuBar;
     
@@ -67,9 +62,9 @@ public class Editor extends JFrame implements ActionListener {
         
         // SpellChecker ın tanımlanması
         // Olası hata nedeni: words.txt bulunamadı
-        if(spellChecker == null){
+        if(SpellChecker.instance == null){
             try{
-                spellChecker = new SpellChecker("./words.txt");
+                SpellChecker.initialize("./words.txt");
             }
             catch (CannotInitilazeWordDictionary e){
                 JOptionPane.showMessageDialog(this, e.getMessage());
@@ -324,7 +319,7 @@ public class Editor extends JFrame implements ActionListener {
                 createWindow();
                 break;
             case "Spell check":
-                SpellCheckerUI.createWindow(this, textArea, spellChecker);
+                SpellCheckerUI.createWindow(this, textArea);
                 break;
             default:
                 break;

@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+import java.util.Iterator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,10 +46,12 @@ public class WordYielderTest {
     public void testNext() {
         System.out.println("next");
         WordYielder instance = new WordYielder(text);
+        Iterator iterator = instance.iterator();
         String [] expResult = {"Merhaba", "dir", "ekibi", "bunu", "yapmıştır", "Ege", "ege"};
         String [] result = new String [expResult.length];
         for (int i = 0; i < expResult.length; i++) {
-            result[i] = instance.next().getWord();
+            Word w = (Word)iterator.next();
+            result[i] = w.getWord();
         }
         assertArrayEquals(expResult, result);
     }
