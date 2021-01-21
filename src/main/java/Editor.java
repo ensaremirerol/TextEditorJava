@@ -24,6 +24,8 @@ public class Editor extends JFrame implements ActionListener {
     // Undo ve Redo işlevlerinin çalışması için
     private UndoManager undoManager = new UndoManager();
     
+    private UndoInvoker undoInvoker = new UndoInvoker(undoManager);
+    
     // Sağ tıklama menüsü
     private final JPopupMenu popMenu;
     
@@ -298,10 +300,10 @@ public class Editor extends JFrame implements ActionListener {
                 textArea.paste();
                 break;
             case "Undo":
-                if(undoManager.canUndo())undoManager.undo();
+                undoInvoker.undo();
                 break;
             case "Redo":
-                if(undoManager.canRedo())undoManager.redo();
+                undoInvoker.redo();
                 break;
             case "Find":
                 FindReplace.createWindow(this, textArea);
