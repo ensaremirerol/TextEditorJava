@@ -92,7 +92,7 @@ public class FindReplace extends JFrame implements ActionListener{
     }
     
     // Factory metod
-    static FindReplace createWindow(JFrame window, JTextArea textArea){
+    public static FindReplace createWindow(JFrame window, JTextArea textArea){
         return new FindReplace(window, textArea);
     }
     

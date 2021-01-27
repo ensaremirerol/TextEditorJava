@@ -26,6 +26,8 @@ public class Editor extends JFrame implements ActionListener {
     
     private UndoInvoker undoInvoker = new UndoInvoker(undoManager);
     
+    private WindowFactory windowFactory;
+    
     // Sağ tıklama menüsü
     private final JPopupMenu popMenu;
     
@@ -77,6 +79,8 @@ public class Editor extends JFrame implements ActionListener {
         
         // undoManager textArea içindeki document objesinie bağlanır
         textArea.getDocument().addUndoableEditListener(undoManager); // Adding undoManager
+        
+        windowFactory = new WindowFactory(this, textArea);
         
         // Bu custom DocumentListener dosya değiştiğinde haber verir
         // Dosyanın kayıt edilmesine gerek olup olmadığı bu listenr ile belirlenir
@@ -200,7 +204,7 @@ public class Editor extends JFrame implements ActionListener {
         menuBar.add(menu1);
         menuBar.add(menu2);
         
-        // Window init
+        // WindowFactory init
         setJMenuBar(menuBar);
         add(scrollPane);
         setSize(600,600);
@@ -219,8 +223,8 @@ public class Editor extends JFrame implements ActionListener {
     }
     
     // Factory method
-    public static Editor createWindow(){
-        return new Editor();
+    public static void createWindow(){
+        new Editor();
     }
  
     // Popmenu yü farenin bulunduğu noktada açar
@@ -306,7 +310,7 @@ public class Editor extends JFrame implements ActionListener {
                 undoInvoker.redo();
                 break;
             case "Find":
-                FindReplace.createWindow(this, textArea);
+                windowFactory.createWindow("find");
                 break;
             case "Save":
                 fileHandlerUI.saveFunction();
@@ -318,10 +322,10 @@ public class Editor extends JFrame implements ActionListener {
                 fileHandlerUI.openWindow();
                 break;
             case "New": 
-                createWindow();
+                windowFactory.createWindow("editor");
                 break;
             case "Spell check":
-                SpellCheckerUI.createWindow(this, textArea);
+                windowFactory.createWindow("spellcheck");
                 break;
             default:
                 break;
