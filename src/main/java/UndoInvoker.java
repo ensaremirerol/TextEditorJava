@@ -51,7 +51,7 @@ public class UndoInvoker implements UndoableEditListener{
         if(triggerListener){
             Document obj = (Document) e.getSource();
             try{
-                undoMemento.addMementos(obj.getText(0, obj.getLength() - 1));
+                undoMemento.addMementos(obj.getText(0, obj.getLength()));
             }
             catch(BadLocationException a){}
             orginator.setMementos(textArea.getText());
