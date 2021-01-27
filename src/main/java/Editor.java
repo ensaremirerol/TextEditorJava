@@ -9,7 +9,6 @@ import java.awt.event.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.metal.*; 
-import javax.swing.undo.UndoManager;
 /**
  *
  * @author ensar
@@ -21,10 +20,7 @@ public class Editor extends JFrame implements ActionListener {
     // Metin bloğu
     private JTextArea textArea; // Text area
     
-    // Undo ve Redo işlevlerinin çalışması için
-    private UndoManager undoManager = new UndoManager();
-    
-    private UndoInvoker undoInvoker = new UndoInvoker(undoManager);
+    private UndoInvoker undoInvoker;
     
     // Sağ tıklama menüsü
     private final JPopupMenu popMenu;
@@ -62,6 +58,8 @@ public class Editor extends JFrame implements ActionListener {
         
         textArea = new JTextArea();
         
+        undoInvoker = new UndoInvoker(textArea);
+        
         // SpellChecker ın tanımlanması
         // Olası hata nedeni: words.txt bulunamadı
         if(SpellChecker.instance == null){
@@ -76,7 +74,7 @@ public class Editor extends JFrame implements ActionListener {
         fileHandlerUI = new FileHandlerUI(textArea, this);
         
         // undoManager textArea içindeki document objesinie bağlanır
-        textArea.getDocument().addUndoableEditListener(undoManager); // Adding undoManager
+        textArea.getDocument().addUndoableEditListener(undoInvoker); // Adding undoManager
         
         // Bu custom DocumentListener dosya değiştiğinde haber verir
         // Dosyanın kayıt edilmesine gerek olup olmadığı bu listenr ile belirlenir
