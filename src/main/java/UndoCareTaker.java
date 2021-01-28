@@ -19,17 +19,17 @@ class MementosIsEmpty extends Exception{
 }
 
 public class UndoCareTaker {
-    final private Stack<String> mementos = new Stack<>();
+    final private Stack<UndoMemento> mementos = new Stack<>();
 
     public UndoCareTaker() {
     }
     
-    public String getMementos() throws MementosIsEmpty{
+    public UndoMemento getMementos() throws MementosIsEmpty{
         if(mementos.isEmpty()) throw new MementosIsEmpty();
         return mementos.pop();
     }
     
-    public void addMementos(String text){
+    public void addMementos(UndoMemento text){
         mementos.add(text);
         
     }

@@ -26,7 +26,7 @@ public class UndoInvoker implements UndoableEditListener{
         this.textArea = textArea;
         undoMemento = new UndoCareTaker();
         redoMemento = new UndoCareTaker();
-        orginator = new UndoOrginator(textArea.getText());
+        orginator = new UndoOrginator(new UndoMemento(textArea.getText()));
         undo = new UndoCommand(undoMemento, redoMemento, orginator);
         redo = new RedoCommand(undoMemento, redoMemento, orginator);
         
@@ -35,14 +35,14 @@ public class UndoInvoker implements UndoableEditListener{
     public void undo(){
         triggerListener = false;
         undo.execute();
-        textArea.setText(orginator.saveMementos());
+        textArea.setText(orginator.saveMementos().getMemento());
         triggerListener = true;
     }
     
     public void redo(){
         triggerListener = false;
         redo.execute();
-        textArea.setText(orginator.saveMementos());
+        textArea.setText(orginator.saveMementos().getMemento());
         triggerListener = true;
     }
 
@@ -51,10 +51,10 @@ public class UndoInvoker implements UndoableEditListener{
         if(triggerListener){
             Document obj = (Document) e.getSource();
             try{
-                undoMemento.addMementos(obj.getText(0, obj.getLength()));
+                undoMemento.addMementos(new UndoMemento(obj.getText(0, obj.getLength()-1)));
             }
             catch(BadLocationException a){}
-            orginator.setMementos(textArea.getText());
+            orginator.setMementos(new UndoMemento(textArea.getText()));
         }
         
     }
@@ -74,7 +74,7 @@ class UndoCommand implements Command{
     @Override
     public void execute(){
         try {
-            String memento = undoMemento.getMementos();
+            UndoMemento memento = undoMemento.getMementos();
             orginator.setMementos(memento);
             redoMemento.addMementos(memento);
         } catch (MementosIsEmpty e) {
@@ -95,7 +95,7 @@ class RedoCommand implements Command{
     @Override
     public void execute(){
         try {
-            String memento = redoMemento.getMementos();
+            UndoMemento memento = redoMemento.getMementos();
             orginator.setMementos(memento);
             undoMemento.addMementos(memento);
         } catch (MementosIsEmpty e) {
