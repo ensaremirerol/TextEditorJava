@@ -12,13 +12,14 @@ import javax.swing.JTextArea;
  *
  * @author ensar
  */
-public class WindowFactory {
+public class WindowFactory extends AbstractWindowCreator {
     private final JFrame window;
     private final JTextArea textArea;
     public WindowFactory(JFrame window, JTextArea textArea){
         this.window = window;
         this.textArea = textArea;
     }
+    @Override
     public void createWindow(String windowName){
         switch(windowName){
             case "find":
