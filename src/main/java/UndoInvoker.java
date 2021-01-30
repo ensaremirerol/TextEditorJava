@@ -22,7 +22,7 @@ public class UndoInvoker implements UndoableEditListener{
     public UndoInvoker(){
         undoMemento = new UndoCareTaker();
         redoMemento = new UndoCareTaker();
-        orginator = new UndoOrginator(null);
+        orginator = new UndoOrginator();
         undo = new UndoCommand(undoMemento, redoMemento, orginator);
         redo = new RedoCommand(undoMemento, redoMemento, orginator);
         
