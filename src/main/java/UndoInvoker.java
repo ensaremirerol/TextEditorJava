@@ -94,7 +94,7 @@ class RedoCommand implements Command{
             UndoMemento newMemento, oldMemento;
             oldMemento = orginator.saveMementos();
             newMemento = redoMemento.getMementos();
-            if(oldMemento == null && newMemento.getMemento().canRedo()){
+            if(oldMemento == null && newMemento.getMemento().canRedo()){ // Fix here
                 newMemento.getMemento().redo();
             }
             else if(newMemento.getMemento().canRedo()){
