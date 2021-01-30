@@ -30,7 +30,14 @@ public class UndoCareTaker {
     }
     
     public void addMementos(UndoMemento text){
-        mementos.add(text);
-        
+        mementos.add(text);    
+    }
+    
+    public boolean isEmpty(){
+        return mementos.isEmpty();
+    }
+    
+    public void flush(){
+        if (!mementos.isEmpty()) mementos.clear();
     }
 }
