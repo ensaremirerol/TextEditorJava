@@ -12,9 +12,7 @@
 public class UndoOrginator {
     private UndoMemento memento;
 
-    public UndoOrginator(UndoMemento memento) {
-        this.memento = memento;
-    }
+    public UndoOrginator() {}
     
     public UndoMemento saveMementos(){
         return memento;
