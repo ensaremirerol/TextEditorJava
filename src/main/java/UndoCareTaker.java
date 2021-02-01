@@ -29,8 +29,8 @@ public class UndoCareTaker {
         return mementos.pop();
     }
     
-    public void addMementos(UndoMemento text){
-        mementos.add(text);    
+    public void addMementos(UndoMemento undoableEdit){
+        mementos.add(undoableEdit);    
     }
     
     public boolean isEmpty(){

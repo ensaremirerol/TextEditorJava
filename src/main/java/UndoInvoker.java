@@ -1,5 +1,3 @@
-
-import javax.swing.JTextArea;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 
@@ -14,6 +12,8 @@ import javax.swing.event.UndoableEditListener;
  *
  * @author ensar
  */
+
+// Command Pattern ve Mementos kullanarak Undo Redo işlevini gerçekleştirir
 public class UndoInvoker implements UndoableEditListener{
     private boolean triggerListener = true;
     final private Command undo, redo;
@@ -45,13 +45,14 @@ public class UndoInvoker implements UndoableEditListener{
         if(triggerListener){
             undoMemento.addMementos(orginator.saveMementos());
             orginator.setMementos(new UndoMemento(e.getEdit()));
+            // Metin değiştiğinde eğer ki redo boşaltılmaz ise garip hatalara 
+            // neden oluyor
             redoMemento.flush();
         }
         
     }
     
 }
-
 class UndoCommand implements Command{
     final private UndoCareTaker undoMemento, redoMemento;
     final private UndoOrginator orginator;
