@@ -1,3 +1,6 @@
+
+import javax.swing.undo.UndoableEdit;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -9,13 +12,13 @@
  * @author ensar
  */
 public class UndoMemento {
-    private final String memento;
+    private final UndoableEdit memento;
 
-    public UndoMemento(String memento) {
+    public UndoMemento(UndoableEdit memento) {
         this.memento = memento;
     }
     
-    public String getMemento(){
+    public UndoableEdit getMemento(){
         return memento;
     }
 }

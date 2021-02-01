@@ -2,8 +2,6 @@
 import javax.swing.JTextArea;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 
 
 /*
@@ -21,12 +19,10 @@ public class UndoInvoker implements UndoableEditListener{
     final private Command undo, redo;
     final private UndoCareTaker undoMemento, redoMemento;
     final private UndoOrginator orginator;
-    final private JTextArea textArea;
-    public UndoInvoker(JTextArea textArea){
-        this.textArea = textArea;
+    public UndoInvoker(){
         undoMemento = new UndoCareTaker();
         redoMemento = new UndoCareTaker();
-        orginator = new UndoOrginator(new UndoMemento(textArea.getText()));
+        orginator = new UndoOrginator();
         undo = new UndoCommand(undoMemento, redoMemento, orginator);
         redo = new RedoCommand(undoMemento, redoMemento, orginator);
         
@@ -35,26 +31,21 @@ public class UndoInvoker implements UndoableEditListener{
     public void undo(){
         triggerListener = false;
         undo.execute();
-        textArea.setText(orginator.saveMementos().getMemento());
         triggerListener = true;
     }
     
     public void redo(){
         triggerListener = false;
         redo.execute();
-        textArea.setText(orginator.saveMementos().getMemento());
         triggerListener = true;
     }
 
     @Override
     public void undoableEditHappened(UndoableEditEvent e) {
         if(triggerListener){
-            Document obj = (Document) e.getSource();
-            try{
-                undoMemento.addMementos(new UndoMemento(obj.getText(0, obj.getLength()-1)));
-            }
-            catch(BadLocationException a){}
-            orginator.setMementos(new UndoMemento(textArea.getText()));
+            undoMemento.addMementos(orginator.saveMementos());
+            orginator.setMementos(new UndoMemento(e.getEdit()));
+            redoMemento.flush();
         }
         
     }
@@ -74,9 +65,14 @@ class UndoCommand implements Command{
     @Override
     public void execute(){
         try {
-            UndoMemento memento = undoMemento.getMementos();
-            orginator.setMementos(memento);
-            redoMemento.addMementos(memento);
+            UndoMemento newMemento, oldMemento;
+            oldMemento = orginator.saveMementos();
+            newMemento = undoMemento.getMementos();
+            if(oldMemento.getMemento().canUndo()){
+                oldMemento.getMemento().undo();
+                orginator.setMementos(newMemento);
+                redoMemento.addMementos(oldMemento);
+            }
         } catch (MementosIsEmpty e) {
         }
     }
@@ -95,9 +91,17 @@ class RedoCommand implements Command{
     @Override
     public void execute(){
         try {
-            UndoMemento memento = redoMemento.getMementos();
-            orginator.setMementos(memento);
-            undoMemento.addMementos(memento);
+            UndoMemento newMemento, oldMemento;
+            oldMemento = orginator.saveMementos();
+            newMemento = redoMemento.getMementos();
+            if(oldMemento == null && newMemento.getMemento().canRedo()){ // Fix here
+                newMemento.getMemento().redo();
+            }
+            else if(newMemento.getMemento().canRedo()){
+                newMemento.getMemento().redo();      
+            }
+            orginator.setMementos(newMemento);
+            undoMemento.addMementos(oldMemento);
         } catch (MementosIsEmpty e) {
         }
     }

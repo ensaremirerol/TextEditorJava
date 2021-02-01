@@ -60,7 +60,7 @@ public class Editor extends JFrame implements ActionListener {
         
         textArea = new JTextArea();
         
-        undoInvoker = new UndoInvoker(textArea);
+        undoInvoker = new UndoInvoker();
         
         // SpellChecker ın tanımlanması
         // Olası hata nedeni: words.txt bulunamadı
